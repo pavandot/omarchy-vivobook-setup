@@ -1,0 +1,27 @@
+# libfprint + upstream MR !530 (SIGFM matcher) + ELAN 04f3:0903 press-sensor support
+# Install: makepkg -si      Revert: sudo pacman -S libfprint
+# Source: github.com/pavandot/libfprint-elan0903, branch elan-0903
+# (upstream libfprint master + MR !530 + 4 patches, nothing else)
+pkgname=libfprint-elan0903
+pkgver=1.94.100.sigfm.elan0903
+pkgrel=2
+pkgdesc="libfprint with SIGFM matcher and ELAN 04f3:0903 press-sensor support"
+arch=(x86_64)
+url="https://github.com/pavandot/libfprint-elan0903"
+license=(LGPL-2.1-or-later)
+depends=(gcc-libs glib2 glibc libgudev libgusb openssl pixman opencv)
+makedepends=(git meson gobject-introspection doctest)
+provides=("libfprint=1.94.100" libfprint-2.so)
+conflicts=(libfprint libfprint-git)
+source=("libfprint::git+https://github.com/pavandot/libfprint-elan0903.git#branch=elan-0903")
+sha256sums=(SKIP)
+options=(!debug)
+
+build() {
+  arch-meson libfprint build -D doc=false -D gtk-examples=false -D installed-tests=false
+  meson compile -C build
+}
+
+package() {
+  meson install -C build --destdir "$pkgdir"
+}

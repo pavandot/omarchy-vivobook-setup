@@ -1,0 +1,6 @@
+# makepkg build output
+fixes/*/src/
+fixes/*/pkg/
+fixes/*/libfprint/
+fixes/*/*.pkg.tar.zst
+fixes/*/*.log
