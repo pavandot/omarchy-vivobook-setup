@@ -23,6 +23,7 @@ The guides are written so an AI agent can follow them too: point it at a fix's
 | # | Fix | Problem | Status |
 |---|-----|---------|--------|
 | 1 | [ELAN 0903 fingerprint](fixes/elan-0903-fingerprint/) | Fingerprint reader detected but enrollment always fails | ✅ Working (2026-10-17) |
+| 2 | [Display scaling](fixes/display-scaling/) | Display panel has no 1.33× or 1.5× for the 14″ 1080p screen. Sets 1.33× | ✅ Working (2026-10-17) |
 
 ## Adding a fix
 
