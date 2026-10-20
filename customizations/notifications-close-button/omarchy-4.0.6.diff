@@ -1,0 +1,111 @@
+diff -ruN notifications/components/NotificationCard.qml b/pavan.notifications/components/NotificationCard.qml
+--- a/components/NotificationCard.qml	2026-10-20 03:37:53.000000000 +0530
++++ b/components/NotificationCard.qml	2026-10-20 11:04:27.544189533 +0530
+@@ -71,7 +71,9 @@
+   radius: cornerRadius
+   color: Commons.Color.notifications.background
+   borderSpec: cardBorderSpec
+-  clip: true
++  // Not clipped, so the close button can sit over the top-left corner like
++  // macOS. Summary and body already elide to a fixed line count.
++  clip: false
+ 
+   HoverHandler { id: hoverTracker }
+ 
+@@ -194,4 +196,55 @@
+     }
+   }
+ 
++  // macOS-style close button: a small round "x" straddling the top-left
++  // corner that fades in while the card is hovered. Declared after the
++  // card-wide MouseArea so its clicks close instead of activating the
++  // notification. Service.qml widens the input mask to cover its outer half.
++  readonly property color closeFill: Qt.rgba(Commons.Color.notifications.background.r,
++    Commons.Color.notifications.background.g, Commons.Color.notifications.background.b, 1)
++
++  Rectangle {
++    id: closeButton
++
++    readonly property bool hot: closeArea.containsMouse
++
++    width: Style.space(20)
++    height: width
++    x: -Math.round(width * 0.4)
++    y: -Math.round(height * 0.4)
++    radius: width / 2
++    z: 10
++    color: Qt.lighter(root.closeFill, hot ? 2.0 : 1.5)
++    border.width: 1
++    border.color: Util.alpha(Commons.Color.notifications.text, 0.3)
++    opacity: root.hovered || hot ? 1 : 0
++    visible: opacity > 0
++
++    Behavior on opacity { NumberAnimation { duration: 120; easing.type: Easing.OutCubic } }
++    Behavior on color { ColorAnimation { duration: 100 } }
++
++    Repeater {
++      model: [45, -45]
++      Rectangle {
++        required property int modelData
++        anchors.centerIn: parent
++        width: closeButton.width * 0.44
++        height: Math.max(1.5, closeButton.width * 0.09)
++        radius: height / 2
++        rotation: modelData
++        antialiasing: true
++        color: Util.alpha(Commons.Color.notifications.text, 0.9)
++      }
++    }
++
++    MouseArea {
++      id: closeArea
++      anchors.fill: parent
++      anchors.margins: -Style.space(3)
++      hoverEnabled: true
++      cursorShape: Qt.PointingHandCursor
++      onClicked: root.closeRequested()
++    }
++  }
++
+ }
+diff -ruN notifications/manifest.json b/pavan.notifications/manifest.json
+--- a/manifest.json	2026-10-20 03:37:53.000000000 +0530
++++ b/manifest.json	2026-10-20 11:02:54.064513057 +0530
+@@ -1,7 +1,7 @@
+ {
+   "schemaVersion": 1,
+-  "id": "omarchy.notifications",
+-  "name": "Notifications",
++  "id": "pavan.notifications",
++  "name": "My Notifications",
+   "version": "1.0.0",
+   "author": "Omarchy",
+   "description": "Notification daemon, popups, DND, and history",
+@@ -11,5 +11,8 @@
+   "keepLoaded": true,
+   "entryPoints": {
+     "service": "Service.qml"
++  },
++  "omarchy": {
++    "clonedFrom": "omarchy.notifications"
+   }
+ }
+diff -ruN notifications/Service.qml b/pavan.notifications/Service.qml
+--- a/Service.qml	2026-10-20 03:37:53.000000000 +0530
++++ b/Service.qml	2026-10-20 11:04:27.545238826 +0530
+@@ -975,7 +975,14 @@
+ 
+       // Keep the surface click-through except over the toast column, so the
+       // rest of the (invisible) full-screen overlay never eats input.
+-      mask: Region { item: popupColumn }
++      // Padded up and to the left so the outer half of each card's corner
++      // close button (see NotificationCard) still takes clicks.
++      mask: Region {
++        x: popupColumn.x - Style.space(12)
++        y: popupColumn.y - Style.space(12)
++        width: popupColumn.width + Style.space(12)
++        height: popupColumn.height + Style.space(12)
++      }
+ 
+       ColumnLayout {
+         id: popupColumn

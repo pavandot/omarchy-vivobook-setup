@@ -3,10 +3,10 @@
 > **Machine:** ASUS VivoBook 14 X421IAY / M413IA (AMD Ryzen 5 4500U)
 > **OS:** Omarchy (Arch Linux + Hyprland). Last checked on Omarchy 4.0.4
 
-Fixes for hardware and setup problems on this laptop, so a clean reinstall is a
-checklist instead of a re-investigation. Every fix has its own folder with a guide
-(why it's needed, how to apply it, how to check it, how to undo it) and any scripts
-it needs.
+Fixes for hardware and setup problems on this laptop, plus my desktop
+customizations, so a clean reinstall is a checklist instead of a re-investigation.
+Every fix and customization has its own folder with a guide (why it's needed, how to
+apply it, how to check it, how to undo it) and any scripts it needs.
 
 ## On a fresh install
 
@@ -14,6 +14,8 @@ it needs.
 2. `git clone https://github.com/pavandot/omarchy-vivobook-setup.git`
 3. Work through the fixes in the table below, in order. Each guide starts with how to
    check whether the fix is still needed: Omarchy or upstream may have fixed it since.
+4. Apply the customizations. Do the fingerprint fix first: the password prompt
+   redesign shows the fingerprint view only once fingerprint is set up in PAM.
 
 The guides are written so an AI agent can follow them too: point it at a fix's
 `README.md`, and confirm before it changes PAM, boot or disk settings.
@@ -25,9 +27,24 @@ The guides are written so an AI agent can follow them too: point it at a fix's
 | 1 | [ELAN 0903 fingerprint](fixes/elan-0903-fingerprint/) | Fingerprint reader detected but enrollment always fails | ✅ Working (2026-10-17) |
 | 2 | [Display scaling](fixes/display-scaling/) | Display panel has no 1.33× or 1.5× for the 14″ 1080p screen. Sets 1.33× | ✅ Working (2026-10-17) |
 
+## Customizations
+
+Not tied to this laptop's hardware; they work on any Omarchy machine.
+
+| Customization | What it does | Install | Status |
+|---|---|---|---|
+| [Golden Gate theme](customizations/golden-gate-theme/) | macOS 27 "Golden Gate" dark mode: palette, transparent bar, frosted glass, window corners and gaps, T3 Code and browser colours | `./install.sh install --apple-wallpapers` | ✅ Working (2026-10-20) |
+| [Notification close button](customizations/notifications-close-button/) | macOS-style "×" on a notification's corner while hovered | `../shell-plugin.sh install pavan.notifications` | ✅ Working (2026-10-20) |
+| [Touch ID-style password prompt](customizations/polkit-touch-id-prompt/) | Redesigns the polkit prompt as a macOS Touch ID sheet, with fingerprint and password views | `../shell-plugin.sh install pavan.polkit` | ✅ Working (2026-10-20) |
+
+The two plugin customizations are clones of Omarchy's own shell plugins, made with
+`omarchy plugin clone`. Each folder has a diff against Omarchy 4.0.6's original,
+for re-applying the change after an Omarchy update changes the plugin.
+
 ## Adding a fix
 
-Create `fixes/<short-name>/README.md` with these sections, then add a row above:
+Create `fixes/<short-name>/README.md` (or `customizations/<short-name>/README.md`)
+with these sections, then add a row above:
 
 - **Status / Applies to:** date verified, Omarchy version, hardware it applies to
 - **Check:** a command that shows whether the fix is still needed
