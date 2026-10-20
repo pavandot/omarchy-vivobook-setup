@@ -20,6 +20,41 @@ apply it, how to check it, how to undo it) and any scripts it needs.
 The guides are written so an AI agent can follow them too: point it at a fix's
 `README.md`, and confirm before it changes PAM, boot or disk settings.
 
+### With an AI agent
+
+Open the agent in a terminal on the desktop (not over SSH: the scripts need the
+Hyprland session) and paste:
+
+```
+Set up this laptop from my repo https://github.com/pavandot/omarchy-vivobook-setup.
+
+Clone it to ~/omarchy-vivobook-setup and read the README. Work through it in order:
+first everything in fixes/, then everything in customizations/.
+
+For each item:
+- Read its README.
+- Run its Check first, and skip the item if it's no longer needed (Omarchy may have fixed it).
+- Then follow its Install and Verify steps, and tell me the result before moving on.
+
+Rules:
+- Ask me before changing PAM, boot or disk settings.
+- If the fingerprint fix's test-fallback prints "PASSWORD FALLBACK BROKEN", run its revert right away and stop.
+- I'll do the steps that need me: typing my sudo password, and touching the fingerprint sensor during enrollment and verify.
+
+Choices:
+- Golden Gate theme: install with --apple-wallpapers, and also do the optional terminal font step.
+- Display scale: 1.5.
+- If Omarchy is newer than 4.0.6 and a plugin's files differ from the repo's copy, tell me before installing it.
+
+When you're done, list what was installed, what was skipped and why, and anything that failed.
+```
+
+You'll need to type your sudo password (installing the fingerprint driver needs it)
+and tap the fingerprint sensor about 15 times during enrollment; the agent pauses
+and asks. The plugin clones were made from Omarchy 4.0.6, so on a newer Omarchy the
+agent checks them against the new originals first (each guide's "After an Omarchy
+update" section).
+
 ## Fixes
 
 | # | Fix | Problem | Status |
