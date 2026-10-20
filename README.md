@@ -25,19 +25,19 @@ The guides are written so an AI agent can follow them too: point it at a fix's
 | # | Fix | Problem | Status |
 |---|-----|---------|--------|
 | 1 | [ELAN 0903 fingerprint](fixes/elan-0903-fingerprint/) | Fingerprint reader detected but enrollment always fails | ✅ Working (2026-10-17) |
-| 2 | [Display scaling](fixes/display-scaling/) | Display panel has no 1.33× or 1.5× for the 14″ 1080p screen. Sets 1.33× | ✅ Working (2026-10-17) |
 
 ## Customizations
 
-Not tied to this laptop's hardware; they work on any Omarchy machine.
+Changes to how Omarchy looks and behaves. They work on any Omarchy machine; the scale presets suit any 1080p laptop.
 
 | Customization | What it does | Install | Status |
 |---|---|---|---|
+| [Display scale presets](customizations/display-scale-presets/) | Adds 1.33× and 1.5× to the Display dropdown's scale buttons, for the 14″ 1080p screen (moved here from `fixes/`) | `../shell-plugin.sh install pavan.monitor`, then `omarchy hyprland monitor scaling 1.5` | ✅ Working (2026-10-20) |
 | [Golden Gate theme](customizations/golden-gate-theme/) | macOS 27 "Golden Gate" dark mode: palette, transparent bar, frosted glass, window corners and gaps, T3 Code and browser colours | `./install.sh install --apple-wallpapers` | ✅ Working (2026-10-20) |
 | [Notification close button](customizations/notifications-close-button/) | macOS-style "×" on a notification's corner while hovered | `../shell-plugin.sh install pavan.notifications` | ✅ Working (2026-10-20) |
 | [Touch ID-style password prompt](customizations/polkit-touch-id-prompt/) | Redesigns the polkit prompt as a macOS Touch ID sheet, with fingerprint and password views | `../shell-plugin.sh install pavan.polkit` | ✅ Working (2026-10-20) |
 
-The two plugin customizations are clones of Omarchy's own shell plugins, made with
+The three plugin customizations are clones of Omarchy's own shell plugins, made with
 `omarchy plugin clone`. Each folder has a diff against Omarchy 4.0.6's original,
 for re-applying the change after an Omarchy update changes the plugin.
 
